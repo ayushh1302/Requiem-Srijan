@@ -1,0 +1,35 @@
+EMPLOYMENT AGREEMENT & OFFER LETTER
+
+This Employment Agreement is entered into on this 15th day of November, 2024 between:
+
+Apex Technologies Private Limited, having its corporate office at Tech Park, Kharadi, Pune - 411014 (hereinafter referred to as the "Company");
+
+AND
+
+Mr. Rohan Deshmukh, residing at Kothrud, Pune - 411038 (hereinafter referred to as the "Employee").
+
+1. Designation and Remuneration:
+The Employee is hereby appointed as "Software Engineer - Backend". The annual Cost to Company (CTC) shall be INR 8,50,000 per annum, disbursed monthly on the final working day of each calendar month after standard statutory deductions.
+
+2. Working Hours and Mandatory 24/7 Availability:
+The standard working schedule is 9:00 AM to 6:00 PM, Monday to Friday. However, given the fast-paced nature of the Company, the Employee explicitly agrees to remain on active call 24 hours a day, 7 days a week, including weekends and statutory public holidays, without eligibility for overtime compensation or compensatory leave.
+
+3. Comprehensive Post-Employment Non-Compete:
+For a period of 36 (thirty-six) months following the cessation or termination of employment for any reason, the Employee shall not engage with, be employed by, advise, or launch any commercial enterprise anywhere within the territory of the Republic of India that operates within the software or technology domain.
+
+4. Intellectual Property & Personal Inventions:
+The Company shall be the absolute and sole proprietor of all inventions, software repositories, designs, algorithms, artistic works, or concepts developed by the Employee during their tenure, regardless of whether developed during personal off-hours, on personal hardware, or unrelated to the Company's business.
+
+5. Termination and Notice Period:
+The Company may terminate the Employee's engagement at any time with 3 (three) days notice without showing cause. The Employee must provide a minimum of 90 (ninety) calendar days prior written notice prior to resigning, failing which 3 months' gross salary shall be forfeited.
+
+6. Confidentiality and Trade Secrets:
+The Employee agrees not to disclose, publish, or disseminate any proprietary trade secrets, customer lists, architectural blueprints, or financial metrics to any unauthorized third party during or after the period of employment.
+
+7. Probation and Confirmation:
+The Employee shall serve an initial probationary period of 6 months. The Company reserves the right to extend the probationary period indefinitely at its sole discretion without written explanation.
+
+ACCEPTED AND AGREED:
+
+For Apex Technologies Pvt Ltd: Authorized Signatory
+Employee: Rohan Deshmukh

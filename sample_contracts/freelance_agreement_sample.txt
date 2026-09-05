@@ -1,0 +1,30 @@
+FREELANCE SOFTWARE SERVICES AGREEMENT
+
+This Freelance Services Agreement is executed on 10th January, 2025 by and between:
+
+Client: Nova Digital Ventures LLP, Mumbai, Maharashtra
+Contractor: Priya Kulkarni (Independent Freelance Developer), Pune, Maharashtra
+
+TERMS & CONDITIONS:
+
+1. Scope of Work and Deliverables:
+The Contractor agrees to design, build, and deploy a responsive web portal and mobile dashboard as described in the agreed preliminary project specification sheet.
+
+2. Unlimited Free Revisions:
+The Contractor agrees to provide unlimited revisions, redesigns, rework, and additional feature modifications at no additional cost until the Client expresses 100% subjective satisfaction with the finished product.
+
+3. Payment Schedule & Unilateral Withholding:
+The total agreed project fee is INR 1,20,000. Payment shall be made in a single lump sum strictly upon final client sign-off. The Client reserves the right to withhold payment indefinitely if any milestone or interim delivery is delayed by more than 24 hours.
+
+4. Intellectual Property and Code Ownership:
+All intellectual property rights, copyright, source code, design artifacts, and technical assets shall belong solely and immediately to the Client upon creation, regardless of whether project payments have been issued or received.
+
+5. Daily Delay Penalties:
+For each calendar day of delivery delay beyond the initial estimated launch date, the Contractor shall pay a penalty of 5% of the total project value to the Client, deductible directly from any final invoice.
+
+6. Independent Contractor Relationship:
+The Contractor is an independent contractor and not an employee of the Client. The Contractor shall be solely responsible for their own development equipment, internet, taxes, and statutory compliance.
+
+ACCEPTED BY:
+Client: Nova Digital Ventures LLP
+Contractor: Priya Kulkarni

@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClauseClear® — Understand Contracts Alwayzz® Before You Sign</title>
+    <meta name="description" content="AI-Powered Legal Tech contract analyzer and negotiation assistant. Explains legal jargon in plain English, highlights risky clauses, detects missing protections, and provides balanced counter-wording." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- React 18 & Babel for standalone execution -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #0a0a0a;
+        --muted: #6b6b6b;
+        --button-bg: #0a0a0a;
+        --button-text: #ffffff;
+        --border-soft: rgba(0, 0, 0, 0.08);
+        --green: #17c964;
+        --red: #ef4444;
+        --yellow: #f59e0b;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+        letter-spacing: -0.02em;
+      }
+
+      .serif {
+        font-family: 'Source Serif 4', Georgia, serif;
+      }
+
+      .serif.italic {
+        font-family: 'Source Serif 4', Georgia, serif;
+        font-style: italic;
+      }
+
+      /* Navbar */
+      .navbar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      .navbar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px 36px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar-logo {
+        font-family: 'Source Serif 4', Georgia, serif;
+        font-size: 28px;
+        font-weight: 600;
+        font-style: italic;
+        letter-spacing: -0.08em;
+        color: var(--text);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: baseline;
+      }
+
+      .navbar-logo-tm {
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        font-style: normal;
+        margin-left: 2px;
+        vertical-align: super;
+      }
+
+      .nav-right-cluster {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .hackathon-chip {
+        font-size: 12px;
+        font-weight: 600;
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.08);
+        border: 1px solid rgba(37, 99, 235, 0.2);
+        padding: 6px 12px;
+        border-radius: 9999px;
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .hackathon-chip { display: inline-block; }
+      }
+
+      .menu-pill-btn {
+        background-color: var(--button-bg);
+        color: var(--button-text);
+        border: none;
+        border-radius: 9999px;
+        padding: 8px 18px;
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: transform 0.15s ease;
+      }
+
+      .menu-pill-btn:hover {
+        transform: translateY(-1px);
+        background-color: #1a1a1a;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        position: relative;
+        min-height: 820px;
+        padding: 140px 36px 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+        background-color: var(--bg);
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260626_041422_4a459e05-abce-4150-9fb7-4ededc423cd1.png&w=1280&q=85');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 680px;
+        width: 100%;
+      }
+
+      /* Ticker */
+      .ticker-container {
+        max-width: 540px;
+        width: 100%;
+        height: 36px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 24px;
+        mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+      }
+
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: marquee-left 30s linear infinite;
+      }
+
+      .ticker-group {
+        display: flex;
+        gap: 8px;
+        padding-right: 8px;
+      }
+
+      .ticker-pill {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        background-color: rgb(251, 251, 251);
+        border: 1px solid var(--border-soft);
+        padding: 6px 14px;
+        border-radius: 9999px;
+        white-space: nowrap;
+      }
+
+      .hero-title {
+        max-width: 620px;
+        font-size: 72px;
+        line-height: 1.05;
+        letter-spacing: -0.07em;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 18px;
+      }
+
+      .hero-title-italic {
+        font-family: 'Source Serif 4', Georgia, serif;
+        font-style: italic;
+        font-weight: 600;
+        letter-spacing: -0.08em;
+      }
+
+      .hero-title-sup {
+        font-family: 'Inter', sans-serif;
+        font-size: 22px;
+        font-weight: 600;
+        vertical-align: super;
+      }
+
+      .hero-subtitle {
+        max-width: 500px;
+        font-size: 17px;
+        line-height: 1.45;
+        font-weight: 400;
+        color: var(--muted);
+        letter-spacing: -0.02em;
+        margin-bottom: 32px;
+      }
+
+      /* CTA Row */
+      .cta-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        height: 54px;
+        padding: 0 28px;
+        background-color: var(--button-bg);
+        color: var(--button-text);
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        border-radius: 9999px;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      }
+
+      .btn-secondary {
+        height: 54px;
+        padding: 0 24px;
+        background-color: #ffffff;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid var(--border-soft);
+        border-radius: 9999px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-1px);
+        border-color: #cbd5e1;
+      }
+
+      .btn-book {
+        background-color: #ffffff;
+        border: 4px solid rgb(248, 248, 248);
+        border-radius: 9999px;
+        padding: 6px 20px 6px 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        transition: transform 0.2s ease;
+      }
+
+      .btn-book:hover { transform: translateY(-1px); }
+
+      .book-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .book-text-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .book-text-primary {
+        font-size: 13px;
+        font-weight: 600;
+        color: #000000;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+      }
+
+      .book-text-secondary {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgb(152, 152, 152);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        line-height: 1.2;
+      }
+
+      .green-status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: rgb(29, 204, 93);
+        display: inline-block;
+      }
+
+      /* Curved Lines */
+      .curved-lines-container {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        overflow: hidden;
+      }
+
+      .curved-lines-side {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .curved-lines-left { left: 0; align-items: flex-start; }
+      .curved-lines-right { right: 0; align-items: flex-end; }
+
+      .curved-line {
+        height: 30px;
+        border: 2.5px solid #FCFAF8;
+        opacity: 0;
+        animation: line-pulse 5s ease-in-out infinite;
+      }
+
+      .curved-line.left {
+        border-left: none;
+        border-top-right-radius: 80px;
+        border-bottom-right-radius: 80px;
+      }
+
+      .curved-line.right {
+        border-right: none;
+        border-top-left-radius: 80px;
+        border-bottom-left-radius: 80px;
+      }
+
+      .progressive-blur {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 160px;
+        background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.4) 40%, #ffffff 100%);
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      /* Quick Sample Picker Bar */
+      .samples-bar {
+        position: relative;
+        z-index: 20;
+        max-width: 1100px;
+        margin: -40px auto 40px;
+        padding: 20px 24px;
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid var(--border-soft);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .samples-bar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .samples-buttons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+
+      .sample-card-btn {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .sample-card-btn:hover {
+        background: #FFFFFF;
+        border-color: #0F172A;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      }
+
+      .sample-btn-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0F172A;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .sample-btn-desc {
+        font-size: 12px;
+        color: #64748B;
+        margin-top: 2px;
+      }
+
+      /* Analysis Workspace Section */
+      .workspace-section {
+        max-width: 1200px;
+        margin: 0 auto 80px;
+        padding: 0 24px;
+      }
+
+      /* Metric Grid */
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+
+      .metric-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #E2E8F0;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      }
+
+      .metric-val {
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 1.1;
+      }
+
+      .metric-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748B;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-top: 4px;
+      }
+
+      /* Workspace Tabs */
+      .tab-nav {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #E2E8F0;
+        margin-bottom: 24px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+
+      .tab-btn {
+        background: transparent;
+        border: none;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #64748B;
+        cursor: pointer;
+        border-radius: 8px;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+      }
+
+      .tab-btn.active {
+        background: #0F172A;
+        color: #ffffff;
+      }
+
+      /* Clause Cards */
+      .clause-card {
+        background: #ffffff;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .clause-card.red { border-left: 5px solid var(--red); background: #FEF2F2; }
+      .clause-card.yellow { border-left: 5px solid var(--yellow); background: #FFFBEB; }
+      .clause-card.green { border-left: 5px solid var(--green); background: #F0FDF4; }
+
+      .clause-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .clause-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #0F172A;
+      }
+
+      .badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        text-transform: uppercase;
+      }
+
+      .badge.red { background: #DC2626; color: white; }
+      .badge.yellow { background: #D97706; color: white; }
+      .badge.green { background: #16A34A; color: white; }
+
+      .plain-english-box {
+        font-size: 14.5px;
+        color: #1E293B;
+        line-height: 1.5;
+        margin-bottom: 10px;
+      }
+
+      .concern-box {
+        background: #FEE2E2;
+        color: #991B1B;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+      }
+
+      .negotiation-box {
+        background: #DCFCE7;
+        color: #14532D;
+        border: 1px dashed #16A34A;
+        font-size: 13.5px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+
+      .copy-btn {
+        background: #ffffff;
+        border: 1px solid #CBD5E1;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+
+      /* Chatbot UI */
+      .chat-box {
+        background: #ffffff;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-height: 600px;
+      }
+
+      .chat-messages {
+        overflow-y: auto;
+        max-height: 380px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-right: 8px;
+      }
+
+      .chat-msg {
+        padding: 12px 16px;
+        border-radius: 10px;
+        max-width: 80%;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .chat-msg.user {
+        align-self: flex-end;
+        background: #0F172A;
+        color: #ffffff;
+      }
+
+      .chat-msg.assistant {
+        align-self: flex-start;
+        background: #F1F5F9;
+        color: #0F172A;
+        border: 1px solid #E2E8F0;
+      }
+
+      .chat-citation {
+        display: inline-block;
+        background: #EFF6FF;
+        color: #1D4ED8;
+        border: 1px solid #BFDBFE;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 6px;
+      }
+
+      .chat-input-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex-grow: 1;
+        padding: 12px 16px;
+        border-radius: 9999px;
+        border: 1px solid #CBD5E1;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .chat-input:focus {
+        border-color: #0F172A;
+      }
+
+      /* Trusted By */
+      .trusted-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 36px 36px 64px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+
+      .trusted-label {
+        max-width: 163px;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+        line-height: 1.35;
+        flex-shrink: 0;
+      }
+
+      .trusted-marquee-container {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+        mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+      }
+
+      .trusted-marquee-track {
+        display: flex;
+        width: max-content;
+        animation: marquee-left 30s linear infinite;
+      }
+
+      .trusted-logo-group {
+        display: flex;
+        align-items: center;
+        gap: 48px;
+        padding-right: 48px;
+      }
+
+      .trusted-logo-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000000;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+      }
+
+      .logo-airbnb { font-family: 'Cedarville Cursive', cursive; font-size: 22px; font-weight: 700; }
+      .logo-shopify { font-family: system-ui, sans-serif; font-weight: 800; }
+      .logo-notion { font-family: Georgia, serif; font-weight: 500; }
+      .logo-linear { font-family: 'Inter', sans-serif; font-weight: 600; }
+      .logo-webflow { font-family: 'Inter', sans-serif; font-weight: 700; }
+      .logo-figma { font-family: system-ui, sans-serif; font-weight: 600; }
+      .logo-slack { font-family: Georgia, serif; font-weight: 700; }
+      .logo-stripe { font-family: system-ui, sans-serif; font-weight: 800; }
+      .logo-vercel { font-family: 'Inter', sans-serif; font-weight: 600; }
+      .logo-framer { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; }
+
+      @keyframes marquee-left {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+
+      @keyframes line-pulse {
+        0% { opacity: 0; transform: scale(1); }
+        15% { opacity: 0.9; }
+        70% { opacity: 0.4; }
+        100% { opacity: 0; transform: scale(0.85); }
+      }
+
+      @media (max-width: 810px) {
+        .hero-title { font-size: clamp(40px, 11vw, 48px); }
+        .hero-section { padding: 110px 20px 80px; min-height: 680px; }
+        .curved-lines-side { display: none; }
+        .trusted-section { flex-direction: column; text-align: center; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef } = React;
+
+      // Icons
+      const FileTextIcon = () => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      );
+      const SparklesIcon = () => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+      );
+
+      // Curved Lines Component
+      function CurvedLines() {
+        const lineCount = 20;
+        const lines = Array.from({ length: lineCount }, (_, i) => ({
+          id: i,
+          delay: `${i * 0.25}s`,
+          width: `${60 + i * 10}px`,
+        }));
+
+        return (
+          <div className="curved-lines-container" aria-hidden="true">
+            <div className="curved-lines-side curved-lines-left">
+              {lines.map((l) => (
+                <div key={`l-${l.id}`} className="curved-line left" style={{ width: l.width, animationDelay: l.delay }} />
+              ))}
+            </div>
+            <div className="curved-lines-side curved-lines-right">
+              {lines.map((l) => (
+                <div key={`r-${l.id}`} className="curved-line right" style={{ width: l.width, animationDelay: l.delay }} />
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      // App Root
+      function App() {
+        const [sessionId, setSessionId] = useState(() => 'sess_' + Date.now());
+        const [analysisData, setAnalysisData] = useState(null);
+        const [loading, setLoading] = useState(false);
+        const [statusMsg, setStatusMsg] = useState('');
+        const [activeTab, setActiveTab] = useState('clauses');
+        const [riskFilter, setRiskFilter] = useState('ALL');
+        const [searchKw, setSearchKw] = useState('');
+        const [chatMessages, setChatMessages] = useState([]);
+        const [chatInput, setChatInput] = useState('');
+        const [chatLoading, setChatLoading] = useState(false);
+        const fileInputRef = useRef(null);
+        const workspaceRef = useRef(null);
+
+        // Load sample contract on click
+        const loadSampleContract = async (sampleType) => {
+          setLoading(true);
+          setStatusMsg('Loading sample contract and executing AI analysis...');
+          try {
+            // First reset session
+            const newSess = 'sess_' + Date.now();
+            setSessionId(newSess);
+
+            // Fetch sample file from backend or local mock
+            let filename = 'rental_agreement_sample.txt';
+            if (sampleType === 'employment') filename = 'employment_offer_sample.txt';
+            if (sampleType === 'freelance') filename = 'freelance_agreement_sample.txt';
+
+            const resp = await fetch(`/upload`, {
+              method: 'POST',
+              body: (() => {
+                const fd = new FormData();
+                const sampleText = sampleType === 'rental' 
+                  ? `RESIDENTIAL LEASE AGREEMENT\n1. Monthly Rent: INR 35,000.\n2. Security Deposit Forfeiture: Landlord may forfeit INR 150000 if rent is delayed 7 days.\n3. Immediate Eviction: Landlord can terminate in 24 hours without notice.\n4. Maintenance: Tenant pays all major and structural repairs.\n5. Inspection: Landlord may enter premises at any hour without notice.`
+                  : sampleType === 'employment'
+                  ? `EMPLOYMENT AGREEMENT\n1. Remuneration: CTC INR 8,50,000.\n2. Working Hours: Mandatory 24/7 on-call duty without overtime pay.\n3. Non-Compete: 36 months ban on technology employment in India.\n4. IP: Company owns personal inventions made on weekends.\n5. Notice Period: Company gives 3 days, Employee gives 90 days.`
+                  : `FREELANCE AGREEMENT\n1. Scope: Web app development.\n2. Revisions: Unlimited free revisions until subjective client satisfaction.\n3. Payment: Withheld indefinitely if delivery is 24 hours late.\n4. IP: Belongs immediately to client without payment.\n5. Late Penalty: 5% per day.`;
+                
+                const file = new File([sampleText], filename, { type: 'text/plain' });
+                fd.append('file', file);
+                fd.append('session_id', newSess);
+                return fd;
+              })()
+            });
+
+            if (resp.ok) {
+              const analyzeResp = await fetch(`/analyze`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: newSess, contract_type: sampleType })
+              });
+              if (analyzeResp.ok) {
+                const data = await analyzeResp.json();
+                setAnalysisData(data);
+                setStatusMsg('');
+                setTimeout(() => {
+                  workspaceRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }
+            }
+          } catch (e) {
+            console.error(e);
+            setStatusMsg('Error analyzing contract. Ensure backend is running.');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        // Handle file upload
+        const handleFileUpload = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          setLoading(true);
+          setStatusMsg(`Uploading and parsing ${file.name}...`);
+          try {
+            const newSess = 'sess_' + Date.now();
+            setSessionId(newSess);
+
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('session_id', newSess);
+
+            const uploadResp = await fetch(`/upload`, { method: 'POST', body: fd });
+            if (!uploadResp.ok) throw new Error('Upload failed');
+
+            setStatusMsg('AI segmenting clauses, evaluating risks, and calculating fairness score...');
+            const analyzeResp = await fetch(`/analyze`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ session_id: newSess })
+            });
+
+            if (analyzeResp.ok) {
+              const data = await analyzeResp.json();
+              setAnalysisData(data);
+              setStatusMsg('');
+              setTimeout(() => {
+                workspaceRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }
+          } catch (err) {
+            alert('Analysis error: ' + err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        // Chat send
+        const sendChatMessage = async (msgText) => {
+          const text = msgText || chatInput;
+          if (!text.trim() || !analysisData) return;
+
+          const userMsg = { role: 'user', content: text };
+          setChatMessages((prev) => [...prev, userMsg]);
+          setChatInput('');
+          setChatLoading(true);
+
+          try {
+            const res = await fetch(`/chat`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ session_id: analysisData.session_id, message: text })
+            });
+            if (res.ok) {
+              const ans = await res.json();
+              setChatMessages((prev) => [...prev, {
+                role: 'assistant',
+                content: ans.answer,
+                sources: ans.source_clauses || []
+              }]);
+            }
+          } catch (e) {
+            console.error(e);
+          } finally {
+            setChatLoading(false);
+          }
+        };
+
+        const fairness = analysisData?.fairness || {};
+        const score = fairness.fairness_score || 50;
+        const scoreColor = score >= 85 ? '#16A34A' : score >= 70 ? '#CA8A04' : score >= 50 ? '#EA580C' : '#DC2626';
+
+        // Filter clauses
+        const clauses = analysisData?.clauses || [];
+        const analysisMap = (analysisData?.analysis || []).reduce((acc, a) => {
+          acc[a.clause_id] = a;
+          return acc;
+        }, {});
+
+        const filteredClauses = clauses.filter((c) => {
+          const an = analysisMap[c.id] || {};
+          if (riskFilter !== 'ALL' && an.risk_level !== riskFilter) return false;
+          if (searchKw.trim()) {
+            const kw = searchKw.toLowerCase();
+            const combined = (c.title + ' ' + c.original_text + ' ' + (an.plain_english || '')).toLowerCase();
+            if (!combined.includes(kw)) return false;
+          }
+          return true;
+        });
+
+        // Email generation text
+        const riskyClauses = clauses
+          .map((c) => ({ clause: c, analysis: analysisMap[c.id] }))
+          .filter((x) => x.analysis && (x.analysis.risk_level === 'RED' || x.analysis.risk_level === 'YELLOW'));
+
+        const emailText = `Subject: Review & Proposed Minor Clarifications — ${analysisData?.filename || 'Agreement'}\n\nDear ${analysisData?.contract_type === 'rental' ? 'Landlord' : 'Hiring Team / Client'},\n\nThank you for sharing the draft agreement. I have carefully reviewed the terms and am excited to proceed. To ensure mutual clarity and a balanced relationship, I would appreciate your consideration of a few adjustments:\n\n` +
+          riskyClauses.map((x, i) => `${i+1}. Regarding ${x.clause.title} (${x.clause.id}):\n   • Current: "${x.clause.original_text.slice(0, 90)}..."\n   • Proposed: "${x.analysis.suggested_alternative || 'Mutual 30-day notice.'}"\n   • Rationale: ${x.analysis.key_concern}\n`).join('\n') +
+          `\nPlease let me know if these adjustments work for you. Looking forward to finalizing the agreement.\n\nWarm regards,\n[Your Name]`;
+
+        return (
+          <div className="alwayzz-app">
+            {/* Hidden File Input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              style={{ display: 'none' }}
+              accept=".pdf,.docx,.txt"
+            />
+
+            {/* Navbar */}
+            <header className="navbar-container">
+              <nav className="navbar-inner">
+                <a href="#" className="navbar-logo">
+                  ClauseClear<span className="navbar-logo-tm">®</span>
+                </a>
+
+                <div className="nav-right-cluster">
+                  <span className="hackathon-chip">🏆 Srijan Hackathon • CSI GHRCEM Pune</span>
+                  {analysisData && (
+                    <button
+                      className="menu-pill-btn"
+                      style={{ background: '#F1F5F9', color: '#0F172A', border: '1px solid #CBD5E1' }}
+                      onClick={() => setAnalysisData(null)}
+                    >
+                      Reset
+                    </button>
+                  )}
+                  <button className="menu-pill-btn" onClick={() => fileInputRef.current?.click()}>
+                    <span>Upload Contract</span>
+                  </button>
+                </div>
+              </nav>
+            </header>
+
+            {/* Hero Section */}
+            <section className="hero-section">
+              <CurvedLines />
+
+              <div className="hero-content">
+                {/* Ticker Row */}
+                <div className="ticker-container">
+                  <div className="ticker-track">
+                    <div className="ticker-group">
+                      <span className="ticker-pill">Fairness Score 0-100</span>
+                      <span className="ticker-pill">Plain-English Translations</span>
+                      <span className="ticker-pill">Missing Protections</span>
+                      <span className="ticker-pill">Grounded RAG Assistant</span>
+                      <span className="ticker-pill">Negotiation Alternative Wording</span>
+                    </div>
+                    <div className="ticker-group">
+                      <span className="ticker-pill">Fairness Score 0-100</span>
+                      <span className="ticker-pill">Plain-English Translations</span>
+                      <span className="ticker-pill">Missing Protections</span>
+                      <span className="ticker-pill">Grounded RAG Assistant</span>
+                      <span className="ticker-pill">Negotiation Alternative Wording</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hero Title */}
+                <h1 className="hero-title">
+                  Understand contracts{' '}
+                  <span className="hero-title-italic serif italic">alwayzz</span>
+                  <sup className="hero-title-sup">®</sup>{' '}
+                  before you sign.
+                </h1>
+
+                {/* Hero Subtitle */}
+                <p className="hero-subtitle">
+                  A patient, knowledgeable AI partner who explains every clause in plain 8th-grade English, highlights unfair terms, and gives you negotiation-ready counter wording.
+                </p>
+
+                {/* CTA Row */}
+                <div className="cta-row">
+                  <button className="btn-primary" onClick={() => fileInputRef.current?.click()}>
+                    <FileTextIcon /> Upload PDF / DOCX
+                  </button>
+
+                  <button className="btn-secondary" onClick={() => loadSampleContract('rental')}>
+                    <SparklesIcon /> Try Sample Lease
+                  </button>
+
+                  <div className="btn-book">
+                    <img
+                      src="https://framerusercontent.com/images/hfneFL6CHBi5BnNvCeOaqU9HqE4.png"
+                      alt="AI Reviewer Avatar"
+                      className="book-avatar"
+                    />
+                    <div className="book-text-stack">
+                      <span className="book-text-primary">Instant AI Review</span>
+                      <span className="book-text-secondary">
+                        Ready in 3 seconds <span className="green-status-dot" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {loading && (
+                  <div style={{ marginTop: '20px', padding: '10px 20px', background: '#F8FAFC', borderRadius: '9999px', fontSize: '13px', color: '#2563EB', fontWeight: 600 }}>
+                    ⚡ {statusMsg}
+                  </div>
+                )}
+              </div>
+
+              <div className="progressive-blur" aria-hidden="true" />
+            </section>
+
+            {/* Quick Sample Selector Bar */}
+            <div className="samples-bar">
+              <div className="samples-bar-header">
+                <span>⚡ 1-Click Test Contracts (Judges Evaluation Presets)</span>
+                <span>Demo Mode Ready</span>
+              </div>
+              <div className="samples-buttons-grid">
+                <div className="sample-card-btn" onClick={() => loadSampleContract('rental')}>
+                  <div className="sample-btn-title">🏠 Pune Rental Agreement</div>
+                  <div className="sample-btn-desc">24hr eviction, deposit forfeiture, tenant structural liability.</div>
+                </div>
+                <div className="sample-card-btn" onClick={() => loadSampleContract('employment')}>
+                  <div className="sample-btn-title">💼 Tech Job Offer Letter</div>
+                  <div className="sample-btn-desc">36-month non-compete, 24/7 on-call, 90-day asymmetric notice.</div>
+                </div>
+                <div className="sample-card-btn" onClick={() => loadSampleContract('freelance')}>
+                  <div className="sample-btn-title">💻 Freelance Dev Contract</div>
+                  <div className="sample-btn-desc">Unlimited free revisions, 5% daily delay fines, IP unpaid lock.</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Workspace (When Contract is Loaded) */}
+            {analysisData && (
+              <section className="workspace-section" ref={workspaceRef}>
+                {/* Metrics Grid */}
+                <div className="metrics-grid">
+                  <div className="metric-card" style={{ borderTop: `4px solid ${scoreColor}` }}>
+                    <div className="metric-val" style={{ color: scoreColor }}>{score}/100</div>
+                    <div className="metric-lbl">Fairness: {fairness.fairness_label || 'Needs Review'}</div>
+                  </div>
+                  <div className="metric-card" style={{ borderTop: '4px solid #16A34A' }}>
+                    <div className="metric-val" style={{ color: '#16A34A' }}>{fairness.green_count || 0}</div>
+                    <div className="metric-lbl">Safe (Green)</div>
+                  </div>
+                  <div className="metric-card" style={{ borderTop: '4px solid #D97706' }}>
+                    <div className="metric-val" style={{ color: '#D97706' }}>{fairness.yellow_count || 0}</div>
+                    <div className="metric-lbl">Caution (Yellow)</div>
+                  </div>
+                  <div className="metric-card" style={{ borderTop: '4px solid #DC2626' }}>
+                    <div className="metric-val" style={{ color: '#DC2626' }}>{fairness.red_count || 0}</div>
+                    <div className="metric-lbl">High Risk (Red)</div>
+                  </div>
+                  <div className="metric-card" style={{ borderTop: '4px solid #3B82F6' }}>
+                    <div className="metric-val" style={{ color: '#3B82F6' }}>{(analysisData.missing_protections || []).length}</div>
+                    <div className="metric-lbl">Missing Protections</div>
+                  </div>
+                </div>
+
+                {/* Workspace Navigation Tabs */}
+                <div className="tab-nav">
+                  <button className={`tab-btn ${activeTab === 'clauses' ? 'active' : ''}`} onClick={() => setActiveTab('clauses')}>
+                    🔍 Clause Analysis ({clauses.length})
+                  </button>
+                  <button className={`tab-btn ${activeTab === 'missing' ? 'active' : ''}`} onClick={() => setActiveTab('missing')}>
+                    🛡️ Missing Protections ({(analysisData.missing_protections || []).length})
+                  </button>
+                  <button className={`tab-btn ${activeTab === 'email' ? 'active' : ''}`} onClick={() => setActiveTab('email')}>
+                    ✉️ Negotiation Email
+                  </button>
+                  <button className={`tab-btn ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => setActiveTab('chat')}>
+                    💬 Ask ClauseClear (RAG)
+                  </button>
+                  <a href={`/report/${analysisData.session_id}`} target="_blank" className="tab-btn" style={{ textDecoration: 'none', background: '#2563EB', color: '#fff' }}>
+                    📥 Download PDF Report
+                  </a>
+                </div>
+
+                {/* TAB 1: CLAUSE ANALYSIS */}
+                {activeTab === 'clauses' && (
+                  <div>
+                    <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                      <select
+                        value={riskFilter}
+                        onChange={(e) => setRiskFilter(e.target.value)}
+                        style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '13px', fontWeight: 600 }}
+                      >
+                        <option value="ALL">All Risk Levels</option>
+                        <option value="RED">🔴 Red (High Risk)</option>
+                        <option value="YELLOW">🟡 Yellow (Caution)</option>
+                        <option value="GREEN">🟢 Green (Safe)</option>
+                      </select>
+
+                      <input
+                        type="text"
+                        placeholder="Search clauses by keyword (e.g. eviction, deposit, non-compete)..."
+                        value={searchKw}
+                        onChange={(e) => setSearchKw(e.target.value)}
+                        style={{ flexGrow: 1, padding: '10px 16px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '13px' }}
+                      />
+                    </div>
+
+                    {filteredClauses.map((c) => {
+                      const an = analysisMap[c.id] || {};
+                      const riskClass = (an.risk_level || 'GREEN').toLowerCase();
+                      return (
+                        <div key={c.id} className={`clause-card ${riskClass}`}>
+                          <div className="clause-header">
+                            <div className="clause-title">{c.title} <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 500 }}>({c.id})</span></div>
+                            <span className={`badge ${riskClass}`}>{an.risk_level || 'SAFE'}</span>
+                          </div>
+
+                          <div className="plain-english-box">
+                            <b>🗣️ Plain English:</b> {an.plain_english}
+                          </div>
+
+                          {an.key_concern && (
+                            <div className="concern-box">
+                              <b>🎯 Key Concern:</b> {an.key_concern}
+                            </div>
+                          )}
+
+                          {an.suggested_alternative && (
+                            <div className="negotiation-box">
+                              <b>✍️ Negotiation Alternative Wording:</b><br />
+                              <i>"{an.suggested_alternative}"</i>
+                            </div>
+                          )}
+
+                          <div style={{ marginTop: '10px', fontSize: '13px', color: '#334155' }}>
+                            <b>Recommended Action:</b> {an.recommended_user_action}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* TAB 2: MISSING PROTECTIONS */}
+                {activeTab === 'missing' && (
+                  <div>
+                    {(analysisData.missing_protections || []).map((mp, idx) => (
+                      <div key={idx} style={{ background: '#ffffff', border: '1px solid #E2E8F0', borderLeft: '4px solid #DC2626', borderRadius: '8px', padding: '16px 20px', marginBottom: '12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <h4 style={{ margin: 0, color: '#0F172A' }}>{mp.name}</h4>
+                          <span style={{ background: '#DC2626', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px' }}>{mp.importance} IMPORTANCE</span>
+                        </div>
+                        <p style={{ margin: '8px 0', fontSize: '13.5px', color: '#334155' }}><b>Why It Matters:</b> {mp.reason}</p>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#15803D' }}><b>💡 Suggested Addition:</b> <i>"{mp.recommendation}"</i></p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* TAB 3: NEGOTIATION EMAIL */}
+                {activeTab === 'email' && (
+                  <div>
+                    <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '10px' }}>
+                      Ready-to-send polite negotiation email addressing all flagged clauses with ClauseClear's fair alternative proposals:
+                    </p>
+                    <textarea
+                      readOnly
+                      value={emailText}
+                      style={{ width: '100%', height: '320px', padding: '16px', borderRadius: '10px', border: '1px solid #CBD5E1', fontFamily: 'monospace', fontSize: '13px', background: '#F8FAFC' }}
+                    />
+                    <button className="copy-btn" onClick={() => navigator.clipboard.writeText(emailText)}>
+                      📋 Copy Entire Email
+                    </button>
+                  </div>
+                )}
+
+                {/* TAB 4: RAG CHATBOT */}
+                {activeTab === 'chat' && (
+                  <div className="chat-box">
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#64748B' }}>Quick questions:</span>
+                      <button className="copy-btn" onClick={() => sendChatMessage("What is the notice period for termination?")}>Notice period?</button>
+                      <button className="copy-btn" onClick={() => sendChatMessage("Can my deposit be forfeited?")}>Deposit forfeiture?</button>
+                      <button className="copy-btn" onClick={() => sendChatMessage("Are there non-compete restrictions?")}>Non-compete terms?</button>
+                    </div>
+
+                    <div className="chat-messages">
+                      {chatMessages.length === 0 && (
+                        <div style={{ textAlign: 'center', color: '#94A3B8', fontSize: '14px', padding: '30px 0' }}>
+                          Ask any question about this contract. Answers are strictly grounded on the document clauses.
+                        </div>
+                      )}
+                      {chatMessages.map((msg, i) => (
+                        <div key={i} className={`chat-msg ${msg.role}`}>
+                          {msg.content}
+                          {msg.sources && msg.sources.length > 0 && (
+                            <div>
+                              {msg.sources.map((s, idx) => (
+                                <span key={idx} className="chat-citation">📌 {s.title} ({s.clause_id})</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      {chatLoading && <div style={{ fontSize: '13px', color: '#2563EB' }}>Searching contract with ChromaDB vector retrieval...</div>}
+                    </div>
+
+                    <form onSubmit={(e) => { e.preventDefault(); sendChatMessage(); }} className="chat-input-row">
+                      <input
+                        type="text"
+                        placeholder="Ask a question about this agreement..."
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        className="chat-input"
+                      />
+                      <button type="submit" className="btn-primary" style={{ height: '44px', padding: '0 20px', fontSize: '13px' }}>
+                        Send
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* Trusted By Section */}
+            <section className="trusted-section">
+              <div className="trusted-label">
+                Partnered with top-tier companies globally
+              </div>
+
+              <div className="trusted-marquee-container">
+                <div className="trusted-marquee-track">
+                  <div className="trusted-logo-group">
+                    <span className="trusted-logo-text logo-airbnb">airbnb</span>
+                    <span className="trusted-logo-text logo-shopify">Shopify</span>
+                    <span className="trusted-logo-text logo-notion">Notion</span>
+                    <span className="trusted-logo-text logo-linear">Linear</span>
+                    <span className="trusted-logo-text logo-webflow">webflow</span>
+                    <span className="trusted-logo-text logo-figma">Figma</span>
+                    <span className="trusted-logo-text logo-slack">slack</span>
+                    <span className="trusted-logo-text logo-stripe">stripe</span>
+                    <span className="trusted-logo-text logo-vercel">▲ Vercel</span>
+                    <span className="trusted-logo-text logo-framer">Framer</span>
+                  </div>
+                  <div className="trusted-logo-group">
+                    <span className="trusted-logo-text logo-airbnb">airbnb</span>
+                    <span className="trusted-logo-text logo-shopify">Shopify</span>
+                    <span className="trusted-logo-text logo-notion">Notion</span>
+                    <span className="trusted-logo-text logo-linear">Linear</span>
+                    <span className="trusted-logo-text logo-webflow">webflow</span>
+                    <span className="trusted-logo-text logo-figma">Figma</span>
+                    <span className="trusted-logo-text logo-slack">slack</span>
+                    <span className="trusted-logo-text logo-stripe">stripe</span>
+                    <span className="trusted-logo-text logo-vercel">▲ Vercel</span>
+                    <span className="trusted-logo-text logo-framer">Framer</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Footer Disclaimer */}
+            <footer style={{ borderTop: '1px solid #E2E8F0', padding: '24px 36px', textAlign: 'center', fontSize: '12px', color: '#64748B', maxWidth: '1200px', margin: '0 auto' }}>
+              <p><b>Legal Disclaimer:</b> ClauseClear provides AI-generated educational analysis and does not constitute formal legal representation. For critical contractual decisions, consult a licensed advocate.</p>
+              <p style={{ marginTop: '6px' }}>© {new Date().getFullYear()} ClauseClear • Srijan Hackathon (GHRCEM Pune & CSI)</p>
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
